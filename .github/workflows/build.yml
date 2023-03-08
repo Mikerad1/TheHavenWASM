@@ -3,8 +3,8 @@ on:
   pull_request:
     branches: [master]
     paths:
-      - "./Backend/artistmarket/src/**"
-      - "./Backend/artistmarket/Cargo.*"
+      - "./Backend/thehaven/src/**"
+      - "./Backend/thehaven/Cargo.*"
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
@@ -13,7 +13,7 @@ jobs:
       - name: Add wasm32-unknown-unknown
         run: rustup target add wasm32-unknown-unknown
       - name: Change directory
-        run: cd ./Backend/artistmarket 
+        run: cd ./Backend/thehaven 
       - name: Check formatting
         run: cargo fmt -- --check
         shell: bash

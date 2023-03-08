@@ -1,4 +1,4 @@
-# artistmarket Actor
+# thehaven Actor
 
 This project implements an actor that returns a greeting.
 
