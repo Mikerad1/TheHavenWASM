@@ -2,14 +2,11 @@ pub(crate) mod user {
 
     use chrono::Utc;
     use minicbor::{Decode, Encode};
-    use wasmbus_rpc::actor::prelude::*;
-    use wasmbus_rpc::common::Context;
-    use wasmcloud_interface_numbergen::generate_guid;
     use wasmcloud_interface_sqldb::{minicbor, SqlDb, SqlDbError, SqlDbSender};
 
+    use wasmbus_rpc::{common::Context, actor::prelude::WasmHost};
     pub use crate::models::dtos::userdto;
 
-    use self::userdto::userdto::UserDTO;
     type Db = SqlDbSender<WasmHost>;
 
     #[derive(Encode, Decode)]
@@ -117,22 +114,7 @@ pub(crate) mod user {
             let _resp = client.execute(ctx, &sql.into()).await?;
             Ok(())
         }
-        pub async fn register_user(
-            ctx: &Context,
-            client: &Db,
-            input: UserDB,
-        ) -> Result<UserDTO, SqlDbError> {
-            let id = generate_guid().await.unwrap();
-            let resp = client.execute(ctx, &format!(
-                r#"
-                insert into {} (id, username, password, email, created_at, updated_at, id_number, first_name, last_name, phone_number, address, gender)
-                values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');
-                "#, "Users", id, input.username, input.password, input.email, input.created_at, input.updated_at, input.id_number, input.first_name, input.last_name, input.phone_number, input.address, input.gender
-            ).into())
-            .await?;
-
-            Ok(input.into())
-        }
+        
     }
     impl From<userdto::userdto::UserDTO> for UserDB {
         fn from(t: userdto::userdto::UserDTO) -> UserDB {
